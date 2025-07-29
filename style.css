@@ -1,0 +1,51 @@
+body {
+  font-family: monospace;
+  background-color: #f4f4f4;
+  color: #222;
+  text-align: center;
+  padding: 2rem;
+}
+
+.title-box {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  line-height: 1.3;
+}
+
+.progress,
+.clue {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 2rem 0;
+}
+
+.feedback {
+  margin: 1rem 0;
+  font-weight: bold;
+  color: green;
+}
+
+#guess {
+  padding: 0.5rem;
+  font-size: 1rem;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  color: #222;
+  margin: 2rem 0;
+}
+
+#submit {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+#attempts {
+  color: red;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5rem;
+}
+
+.input-area {
+  margin-top: 2rem;
+}
