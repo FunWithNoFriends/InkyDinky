@@ -1,4 +1,6 @@
-const wordBank = [
+let guessedWords = [];
+  
+  const wordBank = [
   { answer: 'Witness Fitness', description: 'Someone observering – Physical training' },
   { answer: 'Atomic Comic', description: 'An immeasurably small – Professional joker' },
   { answer: 'Cricket Picket', description: 'Game with ball and bat – barriered by spaced uprights' },
@@ -29,6 +31,7 @@ function nextRound() {
     document.getElementById('guess').disabled = true;
     document.getElementById('submit').disabled = true;
     return;
+    guessedWords = [];
   }
   current = wordBank.pop();
   [word1, word2] = current.answer.toLowerCase().split(" ");
@@ -42,10 +45,16 @@ function nextRound() {
 }
 
 function updateUI(message = "") {
-  const progress = `${word1Guessed ? word1 : '_'.repeat(word1.length)} ${word2Guessed ? word2 : '_'.repeat(word2.length)}`;
-  document.getElementById('progress').textContent = progress;
+  const word1Display = word1Guessed
+    ? `<span class="neon-purple">${word1}</span>`
+    : `<span class="purple-underline">${'_'.repeat(word1.length)}</span>`;
+  const word2Display = word2Guessed
+    ? `<span class="neon-blue">${word2}</span>`
+    : `<span class="blue-underline">${'_'.repeat(word1.length)}</span>`;
+
+  document.getElementById('progress').innerHTML = `${word1Display} ${word2Display}`;
   document.getElementById('clue').textContent = `"${current.description}"`;
-  document.getElementById('attempts').textContent = '❌'.repeat(wrongGuesses);
+  document.getElementById('attempts').textContent = 'X'.repeat(wrongGuesses);
   document.getElementById('feedback').textContent = message;
   document.getElementById('guess').value = '';
   document.getElementById('guess').focus();
@@ -58,14 +67,14 @@ function processGuess() {
   if (gameOver) return;
 
   const input = document.getElementById('guess').value.trim().toLowerCase();
-  if (!/^[a-z\s]+$/.test(input) || input === "") {
-    updateUI("❗ Please enter letters only.");
-    return;
-  }
+  if (!/^[a-z\s]+$/.test(input) || input.length < 3) {
+  updateUI("Woops.");
+  return;
+}
 
   if (input === current.answer.toLowerCase()) {
     word1Guessed = word2Guessed = true;
-    updateUI(`🎉 Amazing! You guessed the full phrase: ${current.answer}`);
+    updateUI(`Amazing!`);
     gameOver = true;
     return;
   } else if (input === word1 && !word1Guessed) {
@@ -77,7 +86,8 @@ function processGuess() {
   } else {
     wrongGuesses++;
     if (wrongGuesses >= maxGuesses) {
-      updateUI(`💀 Game Over! The correct answer was: ${current.answer}`);
+      updateUI(`Oops. Looks like you beefed it! 
+      The correct answer was: ${current.answer}`);
       gameOver = true;
       return;
     } else {
@@ -86,7 +96,7 @@ function processGuess() {
   }
 
   if (word1Guessed && word2Guessed) {
-    updateUI(`🎉 Congratulations! You guessed both words: ${current.answer}`);
+    updateUI(`Wonderful!`);
     gameOver = true;
   }
 }
@@ -100,3 +110,22 @@ document.getElementById('guess').addEventListener('keydown', function(event) {
 
 shuffle(wordBank);
 nextRound();
+
+
+const helpIcon = document.getElementById('help-icon');
+const helpModal = document.getElementById('help-modal');
+const closeButton = document.querySelector('.close-button');
+
+helpIcon.addEventListener('click', () => {
+  helpModal.classList.remove('hidden');
+});
+
+closeButton.addEventListener('click', () => {
+  helpModal.classList.add('hidden');
+});
+
+window.addEventListener('click', (event) => {
+  if (event.target === helpModal) {
+    helpModal.classList.add('hidden');
+  }
+});
