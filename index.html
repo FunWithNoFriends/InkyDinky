@@ -9,11 +9,23 @@
 
 <body>
 
-  <div class="title-box">
-    ╭───────────────╮<br>
-    &nbsp;Inky Dinky<br>
-    ╰───────────────╯
+<div id="help-icon" title="How to Play">?</div>
+
+<div id="help-modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <h2>Inky Dinky</h2>
+    <p>You're given a riddle that describes a two-word, two-syllable, rhyming phrase.</p>
+<p>Guess either of the words individually or try guessing the full phrase!</p>
+<p>Clues might look like: "A young feline – Glove with separate thumb and finger sections" (Answer: Kitten Mitten).</p>
   </div>
+</div>
+
+<div class="title-box">
+  <span class="title-top">╭───────────────╮</span><br>
+  &nbsp;Inky Dinky<br>
+  <span class="title-bottom">╰───────────────╯</span>
+</div>
 
   <div class="progress" id="progress"></div>
   <div class="clue" id="clue"></div>
@@ -24,6 +36,5 @@
   </div>
   <div class="feedback" id="feedback"></div>
 
-  <script src="script.js"></script>
 </body>
 </html>
