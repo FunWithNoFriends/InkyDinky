@@ -76,19 +76,17 @@
 }
 
 .help-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: 1.5rem;
-  padding: 0.25rem 0.6rem;
+  position: fixed;
+  top: 0.25rem;
+  right: .75rem;
   font-size: 1.25rem;
-  font: bold
   padding: 0.25rem 0.6rem;
   border: none;
    background-color: transparent; /* Transparent background */
    color: white;
   border-radius: 50%;
   cursor: pointer;
+    z-index:1001
 }
 
 .help-button:hover {
