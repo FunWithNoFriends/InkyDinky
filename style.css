@@ -77,16 +77,17 @@
 
 .help-button {
   position: fixed;
-  top: 1.25rem;
-  right: 1.25rem;
+  top: 1.0rem;
+  right: 1.0rem;
   font-size: 1.25rem;
-  padding: 0.25rem 0.6rem;
+  padding: 0.25rem 0.75rem;
   border: none;
    background-color: transparent; /* Transparent background */
    color: white;
   border-radius: 50%;
   cursor: pointer;
     z-index:1001
+    touch-action: manipulation;
 }
 
 .help-button:hover {
