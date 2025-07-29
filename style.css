@@ -31,17 +31,17 @@ body {
   background-color: #f4f4f4;
   border: 1px solid #ccc;
   color: #222;
-  margin: 2rem 0;
+  margin: 1rem 0;
 }
 
 #submit {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem .05rem;
   font-size: 1rem;
 }
 
 #attempts {
   color: red;
-  font-size: 1.0rem;
+  font-size: .75rem;
   margin-bottom: 0.25rem;
   letter-spacing: 0.25rem;
 }
