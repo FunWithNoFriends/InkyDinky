@@ -20,7 +20,7 @@
 }
     
    .title-box {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   line-height: 1.3;
   color: white;
   margin: 0 auto;
