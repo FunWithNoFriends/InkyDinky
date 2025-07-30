@@ -277,7 +277,7 @@
     const wordBank = [
       { answer: 'Witness Fitness', description: 'Someone observing physical training' },
       { answer: 'Atomic Comic', description: 'An immeasurably small professional joker' },
-      { answer: 'Cricket Picket', description: 'A group protesting a rhythmic chirping insect' },
+      { answer: 'Cricket Picket', description: 'A group protesting a chirping insect' },
       { answer: 'Locket Rocket', description: 'An ornamental accessory containing its own propellant' },
       { answer: 'Bumper Jumper', description: 'A car’s protective guard that leaps' },
       { answer: 'Candle Handle', description: 'Wax light with something to grip' },
@@ -304,7 +304,7 @@
       { answer: 'Zebra Debra', description: 'Striped animal and a woman’s name' },
       { answer: 'Bubble Trouble', description: 'Foamy difficulty' },
       { answer: 'Castle Hassle', description: 'Fortress with problems' },
-      { answer: 'Doodle Poodle', description: 'A scribble and a dog breed' },
+      { answer: 'Doodle Poodle', description: 'A scribbled dog breed' },
       { answer: 'Echo Gecko', description: 'Repeated sound and a small lizard' },
       { answer: 'Taken Bacon', description: 'Now stolen crispy pork' },
       { answer: 'Dizzy Fizzy', description: 'Cognitively spinning effervescent beverage' },
@@ -518,7 +518,6 @@
       }
 
       if (word1Guessed && word2Guessed) {
-        updateUI(`Wonderful!`);
         gameOver = true;
         showSuccessModal();
       }
