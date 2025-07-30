@@ -119,4 +119,88 @@ function processGuess() {
   }
 
   if (input === word1 && !word1Guessed) {
-    word1Guessed =
+    word1Guessed = true;
+    updateUI();
+  } else if (input === word2 && !word2Guessed) {
+    word2Guessed = true;
+    updateUI();
+  } else {
+    wrongGuesses++;
+    if (wrongGuesses >= maxGuesses) {
+      updateUI(`Oops. Looks like you beefed it! The correct answer was: ${current.answer}`);
+      gameOver = true;
+    } else {
+      updateUI();
+    }
+  }
+
+  if (word1Guessed && word2Guessed) {
+    updateUI(`Wonderful!`);
+    gameOver = true;
+    showSuccessModal();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window.wordBank || !Array.isArray(window.wordBank)) {
+    alert('Word bank not loaded. Please check your wordbank.js is properly linked.');
+    return;
+  }
+
+  // Shuffle the word bank
+  shuffle(wordBank);
+
+  // Event listeners
+  document.getElementById('submit').addEventListener('click', processGuess);
+  document.getElementById('guess').addEventListener('keydown', function(event) {
+    if (event.key === "Enter") {
+      processGuess();
+    }
+  });
+
+  const helpIcon = document.getElementById('help-icon');
+  const helpModal = document.getElementById('help-modal');
+  const closeButton = document.querySelector('.close-button');
+
+  helpIcon.addEventListener('click', () => {
+    helpModal.classList.remove('hidden');
+  });
+
+  closeButton.addEventListener('click', () => {
+    helpModal.classList.add('hidden');
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === helpModal) {
+      helpModal.classList.add('hidden');
+    }
+  });
+
+  playAgainBtn.addEventListener('click', () => {
+    hideSuccessModal();
+    nextRound();
+  });
+
+  shareBtn.addEventListener('click', () => {
+    const shareText = `I just solved an Inky Dinky and thought of you! ${getShareableLink()}`;
+    copyToClipboard(shareText)
+      .then(() => {
+        shareMsg.style.display = 'block';
+        setTimeout(() => {
+          shareMsg.style.display = 'none';
+        }, 3000);
+      })
+      .catch(() => {
+        alert('Failed to copy link. Please copy manually: ' + shareText);
+      });
+  });
+
+  successModal.addEventListener('click', (e) => {
+    if (e.target === successModal) {
+      hideSuccessModal();
+    }
+  });
+
+  // Start the game
+  nextRound();
+});
