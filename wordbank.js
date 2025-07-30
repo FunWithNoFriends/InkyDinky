@@ -17,4 +17,3 @@ const wordBank = [
   { answer: 'Castle Hassle', description: 'Fortress of inconvenience' },
    { answer: 'Echo Gecko', description: 'A reflective sounding lizard' },
 ];
-];
