@@ -1,4 +1,40 @@
- let guessedWords = [];
+<script>
+    const wordBank = [
+      { answer: 'Witness Fitness', description: 'Someone observing physical training' },
+      { answer: 'Atomic Comic', description: 'An immeasurably small professional joker' },
+      { answer: 'Cricket Picket', description: 'A group protesting a rhythmic chirping insect' },
+      { answer: 'Locket Rocket', description: 'An ornamental accessory containing its own propellant' },
+      { answer: 'Bumper Jumper', description: 'A car’s protective guard that leaps' },
+      { answer: 'Candle Handle', description: 'Wax light with something to grip' },
+      { answer: 'Dollar Scholar', description: 'Money-minded academic' },
+      { answer: 'Finger Singer', description: 'A tiny performer or a hand vocalizer' },
+      { answer: 'Garden Pardon', description: 'Forgiveness found among plants' },
+      { answer: 'Hammer Clammer', description: 'A noisy tool and a shellfish' },
+      { answer: 'Iron Lion', description: 'A strong metal feline' },
+      { answer: 'Jelly Belly', description: 'A soft stomach or candy core' },
+      { answer: 'Kitten Mitten', description: 'A young cat’s hand covering' },
+      { answer: 'Leather Feather', description: 'Soft plume made of hide' },
+      { answer: 'Mango Tango', description: 'A tropical fruit dance' },
+      { answer: 'Noodle Poodle', description: 'Curly-haired pasta dog' },
+      { answer: 'Oven Coven', description: 'A witch group that bakes' },
+      { answer: 'Paper Taper', description: 'A thin sheet that shrinks' },
+      { answer: 'Quilt Guilt', description: 'A warm blanket of remorse' },
+      { answer: 'Ribbon Sibbon', description: 'Decorative strip and a made-up rhyme' },
+      { answer: 'Sail Mail', description: 'Letters carried by boat' },
+      { answer: 'Table Fable', description: 'Furniture with a story' },
+      { answer: 'Unicorn Popcorn', description: 'Mythical snack food' },
+      { answer: 'Velvet Helmet', description: 'Soft head protection' },
+      { answer: 'Whistle Thistle', description: 'A high-pitched prickly plant' },
+      { answer: 'Xenon Tenon', description: 'A rare gas joint' },
+      { answer: 'Yacht Caught', description: 'A luxury boat that was captured' },
+      { answer: 'Zebra Debra', description: 'Striped animal and a woman’s name' },
+      { answer: 'Bubble Trouble', description: 'Foamy difficulty' },
+      { answer: 'Castle Hassle', description: 'Fortress with problems' },
+      { answer: 'Doodle Poodle', description: 'A scribble and a dog breed' },
+      { answer: 'Echo Gecko', description: 'Repeated sound and a small lizard' },
+    ];
+
+    let guessedWords = [];
     let current = {};
     let word1 = '', word2 = '';
     let word1Guessed = false;
@@ -6,6 +42,11 @@
     let wrongGuesses = 0;
     const maxGuesses = 3;
     let gameOver = false;
+
+    const successModal = document.getElementById('success-modal');
+    const playAgainBtn = document.getElementById('play-again-btn');
+    const shareBtn = document.getElementById('share-btn');
+    const shareMsg = document.getElementById('share-msg');
 
     function shuffle(arr) {
       for (let i = arr.length - 1; i > 0; i--) {
@@ -54,6 +95,38 @@
       document.getElementById('submit').disabled = gameOver;
     }
 
+    function showSuccessModal() {
+      successModal.classList.remove('hidden');
+    }
+
+    function hideSuccessModal() {
+      successModal.classList.add('hidden');
+    }
+
+    function getShareableLink() {
+      const baseUrl = window.location.href.split('?')[0];
+      const phrase = encodeURIComponent(current.answer);
+      return `${baseUrl}?phrase=${phrase}`;
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.top = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        return new Promise((res, rej) => {
+          document.execCommand('copy') ? res() : rej();
+          textArea.remove();
+        });
+      }
+    }
+
     function processGuess() {
       if (gameOver) return;
 
@@ -70,11 +143,12 @@
       if (
         inputWords.length === 2 &&
         ((inputWords[0] === answerWords[0] && inputWords[1] === answerWords[1]) ||
-        (inputWords[0] === answerWords[1] && inputWords[1] === answerWords[0]))
+         (inputWords[0] === answerWords[1] && inputWords[1] === answerWords[0]))
       ) {
         word1Guessed = word2Guessed = true;
         updateUI(`Amazing!`);
         gameOver = true;
+        showSuccessModal();
         return;
       }
 
@@ -98,6 +172,7 @@
       if (word1Guessed && word2Guessed) {
         updateUI(`Wonderful!`);
         gameOver = true;
+        showSuccessModal();
       }
     }
 
@@ -126,5 +201,33 @@
       }
     });
 
+    // Success modal buttons
+    playAgainBtn.addEventListener('click', () => {
+      hideSuccessModal();
+      nextRound();
+    });
+
+    shareBtn.addEventListener('click', () => {
+      const shareText = `I just solved an Inky Dinky and thought of you! ${getShareableLink()}`;
+      copyToClipboard(shareText)
+        .then(() => {
+          shareMsg.style.display = 'block';
+          setTimeout(() => {
+            shareMsg.style.display = 'none';
+          }, 3000);
+        })
+        .catch(() => {
+          alert('Failed to copy link. Please copy manually: ' + shareText);
+        });
+    });
+
+    // Hide success modal if clicked outside content
+    successModal.addEventListener('click', (e) => {
+      if (e.target === successModal) {
+        hideSuccessModal();
+      }
+    });
+
     shuffle(wordBank);
     nextRound();
+  </script>
