@@ -239,19 +239,26 @@
 }
 
 
-#keyboard-container {
+ #keyboard-container {
   margin: 2.5rem auto 0 auto;
+  width: 100%;
   max-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
   user-select: none;
+  overflow-x: auto;
+  box-sizing: border-box;
 }
+
 .keyboard-row {
   display: flex;
   justify-content: center;
   gap: 0.3rem;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .key-btn {
   background: rgba(30, 30, 30, 0.85);
   border: 1.5px solid #333;
@@ -266,9 +273,33 @@
   outline: none;
   text-transform: uppercase;
   font-weight: 500;
-  box-shadow: none;
+  box-sizing: border-box;
   opacity: 0.92;
+  max-width: 100%;
 }
+
+.space-key {
+  flex: 1 1 0;
+  min-width: 5rem;
+  max-width: 100%;
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  justify-content: center;
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media (max-width: 600px) {
+  #keyboard-container {
+    max-width: 98vw;
+  }
+  .space-key {
+    min-width: 4rem;
+    font-size: 1.5rem;
+  }
+}
+
 .key-btn:active, .key-btn.pressed {
   background: #222;
   color: #fff;
@@ -317,6 +348,13 @@
   .key-btn.special {
     min-width: 4.2rem;
   }
+}
+
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
 }
 
   </style>
@@ -593,19 +631,23 @@
 const keyboardLayout = [
   ['q','w','e','r','t','y','u','i','o','p'],
   ['a','s','d','f','g','h','j','k','l'],
-  ['↑','z','x','c','v','b','n','m','Backspace']
+  ['z','x','c','v','b','n','m'],
+  ['Enter', 'Space', 'Backspace']
 ];
 
 function renderKeyboard() {
   const container = document.getElementById('keyboard-container');
   container.innerHTML = '';
-  keyboardLayout.forEach(row => {
+  keyboardLayout.forEach((row, rowIdx) => {
     const rowDiv = document.createElement('div');
     rowDiv.className = 'keyboard-row';
     row.forEach(key => {
       const btn = document.createElement('button');
-      btn.className = 'key-btn' + (key === '↑' || key === 'Backspace' ? ' special' : '');
-      btn.textContent = key === 'Backspace' ? '⌫' : key;
+      let classes = 'key-btn';
+      if (['Enter', 'Backspace', 'Space'].includes(key)) classes += ' special';
+      if (key === 'Space') classes += ' space-key';
+      btn.className = classes;
+      btn.textContent = key === 'Backspace' ? '⌫' : (key === 'Space' ? '␣' : key);
       btn.setAttribute('data-key', key);
       btn.addEventListener('click', onKeyboardClick);
       rowDiv.appendChild(btn);
@@ -618,11 +660,16 @@ function onKeyboardClick(e) {
   const key = e.currentTarget.getAttribute('data-key');
   const guessInput = document.getElementById('guess');
   if (gameOver || guessInput.disabled) return;
-  if (key === '↑') {
+  if (key === 'Enter') {
     processGuess();
   } else if (key === 'Backspace') {
     guessInput.value = guessInput.value.slice(0, -1);
     guessInput.focus();
+  } else if (key === 'Space') {
+    if (guessInput.value.length < 20) {
+      guessInput.value += ' ';
+      guessInput.focus();
+    }
   } else if (/^[a-z]$/.test(key)) {
     if (guessInput.value.length < 20) {
       guessInput.value += key;
