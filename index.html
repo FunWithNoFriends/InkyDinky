@@ -199,8 +199,8 @@
 
     #success-modal h2 {
       color: #e900ff;
-      margin-bottom: 1.5rem;
-      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 2.5rem;
+      font-size: clamp(1.25rem, 3vw, 2.0rem);
     }
 
     #success-modal button {
@@ -229,6 +229,75 @@
       display: none;
       font-family: monospace;
     }
+    #keyboard-container {
+  margin: 1.5rem auto 0 auto;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  user-select: none;
+}
+
+
+#keyboard-container {
+  margin: 2.5rem auto 0 auto;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  user-select: none;
+}
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+}
+.key-btn {
+  background: rgba(30, 30, 30, 0.85);
+  border: 1.5px solid #333;
+  color: #bbb;
+  font-family: monospace;
+  font-size: 1.05rem;
+  border-radius: 4px;
+  padding: 0.35rem 0.65rem;
+  min-width: 2.1rem;
+  cursor: pointer;
+  transition: 0.15s;
+  outline: none;
+  text-transform: uppercase;
+  font-weight: 500;
+  box-shadow: none;
+  opacity: 0.92;
+}
+.key-btn:active, .key-btn.pressed {
+  background: #222;
+  color: #fff;
+  border-color: #666;
+}
+.key-btn.special {
+  color: #7abaff;
+  border-color: #444;
+  min-width: 3.1rem;
+  background: rgba(30, 30, 30, 0.92);
+}
+
+.key-btn:hover,
+.key-btn:active,
+.key-btn.pressed {
+  background: #111;
+  color: #e900ff; /* Neon purple */
+  border-color: #e900ff;
+  box-shadow: 0 0 6px #e900ff88, 0 0 2px #e900ff55;
+  z-index: 1;
+}
+.key-btn.special:hover,
+.key-btn.special:active,
+.key-btn.special.pressed {
+  color: #1685f8; /* Neon blue for special keys */
+  border-color: #1685f8;
+  box-shadow: 0 0 6px #1685f888, 0 0 2px #1685f855;
+}
+
   </style>
 </head>
 <body>
@@ -250,6 +319,7 @@
       <input type="text" id="guess" placeholder="Enter your guess" />
       <button id="submit">Submit</button>
     </div>
+    <div id="keyboard-container"></div>
     <div class="feedback" id="feedback"></div>
   </div>
 
@@ -268,7 +338,7 @@
     <div class="modal-content">
       <h2 class="neon-purple">You clever duck, you guessed it!</h2>
       <button id="play-again-btn">Solve another</button>
-      <button id="share-btn">Share Inky Dinky</button>
+      <button id="share-btn">Share this Inky Dinky</button>
       <p id="share-msg">Link copied to clipboard!</p>
     </div>
   </div>
@@ -496,6 +566,67 @@
 
     shuffle(wordBank);
     nextRound();
+    
+    
+    // --- In-game Keyboard ---
+const keyboardLayout = [
+  ['q','w','e','r','t','y','u','i','o','p'],
+  ['a','s','d','f','g','h','j','k','l'],
+  ['↑','z','x','c','v','b','n','m','Backspace']
+];
+
+function renderKeyboard() {
+  const container = document.getElementById('keyboard-container');
+  container.innerHTML = '';
+  keyboardLayout.forEach(row => {
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'keyboard-row';
+    row.forEach(key => {
+      const btn = document.createElement('button');
+      btn.className = 'key-btn' + (key === '↑' || key === 'Backspace' ? ' special' : '');
+      btn.textContent = key === 'Backspace' ? '⌫' : key;
+      btn.setAttribute('data-key', key);
+      btn.addEventListener('click', onKeyboardClick);
+      rowDiv.appendChild(btn);
+    });
+    container.appendChild(rowDiv);
+  });
+}
+
+function onKeyboardClick(e) {
+  const key = e.currentTarget.getAttribute('data-key');
+  const guessInput = document.getElementById('guess');
+  if (gameOver || guessInput.disabled) return;
+  if (key === '↑') {
+    processGuess();
+  } else if (key === 'Backspace') {
+    guessInput.value = guessInput.value.slice(0, -1);
+    guessInput.focus();
+  } else if (/^[a-z]$/.test(key)) {
+    if (guessInput.value.length < 20) {
+      guessInput.value += key;
+      guessInput.focus();
+    }
+  }
+}
+
+// Optional: Keyboard highlights for physical key presses
+document.addEventListener('keydown', function(event) {
+  const key = event.key.toLowerCase();
+  const btn = Array.from(document.querySelectorAll('.key-btn')).find(b => {
+    if (key === 'enter' && b.getAttribute('data-key') === 'Enter') return true;
+    if (key === 'backspace' && b.getAttribute('data-key') === 'Backspace') return true;
+    return b.getAttribute('data-key') === key;
+  });
+  if (btn) {
+    btn.classList.add('pressed');
+    setTimeout(() => btn.classList.remove('pressed'), 120);
+  }
+});
+
+// Call renderKeyboard after DOM is ready
+renderKeyboard();
+    
   </script>
 
 </body>
