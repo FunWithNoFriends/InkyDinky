@@ -62,6 +62,8 @@
       width: 200px;
       text-align: center;
       transition: 0.3s;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     #guess:focus {
@@ -334,6 +336,34 @@
     .key-btn.special {
       min-width: 2rem;
       max-width: 2.8rem;
+    }
+  }
+
+  /* Mobile devices - prevent native keyboard and hide on-screen keyboard */
+  @media (max-width: 768px) {
+    #guess {
+      pointer-events: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    #keyboard-container {
+      display: none;
+    }
+  }
+
+  /* Desktop devices - allow normal typing and show on-screen keyboard */
+  @media (min-width: 769px) {
+    #guess {
+      pointer-events: auto;
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+    }
+    #keyboard-container {
+      display: flex;
     }
   }
 
