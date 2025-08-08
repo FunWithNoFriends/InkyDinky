@@ -309,13 +309,13 @@
       gap: 0.15rem;
     }
     
-    .key-btn {
-      font-size: 0.9rem;
-      padding: 0.2rem 0.3rem;
-      min-width: 1.6rem;
-      height: 1.8rem;
-      max-width: 2.2rem;
-    }
+         .key-btn {
+       font-size: 0.9rem;
+       padding: 0.2rem 0.3rem;
+       min-width: 1.6rem;
+       height: 1.8rem;
+       max-width: 2.2rem;
+     }
     
     .key-btn.special {
       min-width: 2.2rem;
@@ -366,7 +366,7 @@
     }
   }
 
-  /* Desktop devices - allow normal typing and hide on-screen keyboard */
+  /* Desktop devices - allow normal typing and show on-screen keyboard */
   @media (min-width: 769px) {
     #guess {
       pointer-events: auto !important;
@@ -384,7 +384,7 @@
       z-index: auto;
     }
     #keyboard-container {
-      display: none;
+      display: flex;
     }
   }
 
@@ -406,7 +406,7 @@
     <div class="clue" id="clue"></div>
     <div id="attempts"></div>
     <div class="input-area">
-        <input type="text" id="guess" placeholder="Enter your guess" readonly />
+        <input type="text" id="guess" placeholder="Enter your guess" />
       <button id="submit">Submit</button>
     </div>
     <div id="keyboard-container"></div>
