@@ -339,7 +339,7 @@
     }
   }
 
-  /* Mobile devices - prevent native keyboard and hide on-screen keyboard */
+  /* Mobile devices - prevent native keyboard but show on-screen keyboard */
   @media (max-width: 768px) {
     #guess {
       pointer-events: none;
@@ -349,11 +349,11 @@
       user-select: none;
     }
     #keyboard-container {
-      display: none;
+      display: flex;
     }
   }
 
-  /* Desktop devices - allow normal typing and show on-screen keyboard */
+  /* Desktop devices - allow normal typing and hide on-screen keyboard */
   @media (min-width: 769px) {
     #guess {
       pointer-events: auto;
@@ -361,9 +361,10 @@
       -moz-user-select: text;
       -ms-user-select: text;
       user-select: text;
+      cursor: text;
     }
     #keyboard-container {
-      display: flex;
+      display: none;
     }
   }
 
