@@ -230,76 +230,42 @@
       font-family: monospace;
     }
     #keyboard-container {
-  margin: 1.5rem auto 0 auto;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  user-select: none;
-}
-
-
- #keyboard-container {
   margin: 2.5rem auto 0 auto;
   width: 100%;
-  max-width: 400px;
+  max-width: min(95vw, 600px);
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
   user-select: none;
-  overflow-x: auto;
+  padding: 0 0.5rem;
   box-sizing: border-box;
 }
-
 .keyboard-row {
   display: flex;
   justify-content: center;
-  gap: 0.3rem;
-  width: 100%;
-  box-sizing: border-box;
+  gap: clamp(0.2rem, 1vw, 0.4rem);
+  flex-wrap: wrap;
 }
-
 .key-btn {
   background: rgba(30, 30, 30, 0.85);
   border: 1.5px solid #333;
   color: #bbb;
   font-family: monospace;
-  font-size: 1.05rem;
+  font-size: clamp(0.8rem, 2.5vw, 1.05rem);
   border-radius: 4px;
-  padding: 0.35rem 0.65rem;
-  min-width: 2.1rem;
+  padding: clamp(0.25rem, 1.5vw, 0.35rem) clamp(0.4rem, 2vw, 0.65rem);
+  min-width: clamp(1.8rem, 6vw, 2.1rem);
+  height: clamp(2rem, 8vw, 2.5rem);
   cursor: pointer;
   transition: 0.15s;
   outline: none;
   text-transform: uppercase;
   font-weight: 500;
-  box-sizing: border-box;
+  box-shadow: none;
   opacity: 0.92;
-  max-width: 100%;
+  flex: 1;
+  max-width: clamp(2.5rem, 8vw, 3rem);
 }
-
-.space-key {
-  flex: 1 1 0;
-  min-width: 5rem;
-  max-width: 100%;
-  font-size: 1.2rem;
-  letter-spacing: 0.2em;
-  justify-content: center;
-  text-align: center;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-@media (max-width: 600px) {
-  #keyboard-container {
-    max-width: 98vw;
-  }
-  .space-key {
-    min-width: 4rem;
-    font-size: 1.5rem;
-  }
-}
-
 .key-btn:active, .key-btn.pressed {
   background: #222;
   color: #fff;
@@ -308,7 +274,8 @@
 .key-btn.special {
   color: #7abaff;
   border-color: #444;
-  min-width: 3.1rem;
+  min-width: clamp(2.5rem, 8vw, 3.1rem);
+  max-width: clamp(3.5rem, 12vw, 4.5rem);
   background: rgba(30, 30, 30, 0.92);
 }
 
@@ -327,35 +294,48 @@
   color: #1685f8; /* Neon blue for special keys */
   border-color: #1685f8;
   box-shadow: 0 0 6px #1685f888, 0 0 2px #1685f855;
-}
+  }
 
-@media (max-width: 600px) {
-  #keyboard-container {
-    max-width: 98vw;
-    margin-left: auto;
-    margin-right: auto;
-    gap: 0.4rem;
+  /* Mobile-specific adjustments */
+  @media (max-width: 480px) {
+    #keyboard-container {
+      margin: 1.5rem auto 0 auto;
+      padding: 0 0.25rem;
+    }
+    
+    .keyboard-row {
+      gap: 0.15rem;
+    }
+    
+    .key-btn {
+      font-size: 0.9rem;
+      padding: 0.2rem 0.3rem;
+      min-width: 1.6rem;
+      height: 1.8rem;
+      max-width: 2.2rem;
+    }
+    
+    .key-btn.special {
+      min-width: 2.2rem;
+      max-width: 3rem;
+    }
   }
-  .keyboard-row {
-    gap: 0.4rem;
-  }
-  .key-btn {
-    font-size: 1.35rem;
-    min-width: 2.8rem;
-    padding: 0.7rem 0.9rem;
-    border-radius: 7px;
-  }
-  .key-btn.special {
-    min-width: 4.2rem;
-  }
-}
 
-
-.keyboard-row {
-  display: flex;
-  justify-content: center;
-  gap: 0.3rem;
-}
+  /* Very small screens */
+  @media (max-width: 320px) {
+    .key-btn {
+      font-size: 0.8rem;
+      padding: 0.15rem 0.25rem;
+      min-width: 1.4rem;
+      height: 1.6rem;
+      max-width: 2rem;
+    }
+    
+    .key-btn.special {
+      min-width: 2rem;
+      max-width: 2.8rem;
+    }
+  }
 
   </style>
 </head>
@@ -375,7 +355,7 @@
     <div class="clue" id="clue"></div>
     <div id="attempts"></div>
     <div class="input-area">
-        <input type="text" id="guess" placeholder="Enter your guess" readonly />
+        <input type="text" id="guess" placeholder="Enter your guess" />
       <button id="submit">Submit</button>
     </div>
     <div id="keyboard-container"></div>
@@ -631,23 +611,19 @@
 const keyboardLayout = [
   ['q','w','e','r','t','y','u','i','o','p'],
   ['a','s','d','f','g','h','j','k','l'],
-  ['z','x','c','v','b','n','m'],
-  ['Enter', 'Space', 'Backspace']
+  ['↑','z','x','c','v','b','n','m','Backspace']
 ];
 
 function renderKeyboard() {
   const container = document.getElementById('keyboard-container');
   container.innerHTML = '';
-  keyboardLayout.forEach((row, rowIdx) => {
+  keyboardLayout.forEach(row => {
     const rowDiv = document.createElement('div');
     rowDiv.className = 'keyboard-row';
     row.forEach(key => {
       const btn = document.createElement('button');
-      let classes = 'key-btn';
-      if (['Enter', 'Backspace', 'Space'].includes(key)) classes += ' special';
-      if (key === 'Space') classes += ' space-key';
-      btn.className = classes;
-      btn.textContent = key === 'Backspace' ? '⌫' : (key === 'Space' ? '␣' : key);
+      btn.className = 'key-btn' + (key === '↑' || key === 'Backspace' ? ' special' : '');
+      btn.textContent = key === 'Backspace' ? '⌫' : key;
       btn.setAttribute('data-key', key);
       btn.addEventListener('click', onKeyboardClick);
       rowDiv.appendChild(btn);
@@ -660,16 +636,11 @@ function onKeyboardClick(e) {
   const key = e.currentTarget.getAttribute('data-key');
   const guessInput = document.getElementById('guess');
   if (gameOver || guessInput.disabled) return;
-  if (key === 'Enter') {
+  if (key === '↑') {
     processGuess();
   } else if (key === 'Backspace') {
     guessInput.value = guessInput.value.slice(0, -1);
     guessInput.focus();
-  } else if (key === 'Space') {
-    if (guessInput.value.length < 20) {
-      guessInput.value += ' ';
-      guessInput.focus();
-    }
   } else if (/^[a-z]$/.test(key)) {
     if (guessInput.value.length < 20) {
       guessInput.value += key;
