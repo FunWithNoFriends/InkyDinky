@@ -342,20 +342,24 @@
   /* Mobile devices - prevent native keyboard but show on-screen keyboard */
   @media (max-width: 768px) {
     #guess {
-      pointer-events: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      -webkit-touch-callout: none;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      background: transparent;
-      border: none;
-      outline: none;
-      caret-color: transparent;
+      pointer-events: none !important;
+      -webkit-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+      user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      background-color: #111 !important;
+      border: 2px solid #e900ff !important;
+      color: #e900ff !important;
+      outline: none !important;
+      caret-color: transparent !important;
+      cursor: default !important;
+      position: relative;
+      z-index: -1;
     }
     #keyboard-container {
       display: flex;
@@ -365,12 +369,19 @@
   /* Desktop devices - allow normal typing and hide on-screen keyboard */
   @media (min-width: 769px) {
     #guess {
-      pointer-events: auto;
-      -webkit-user-select: text;
-      -moz-user-select: text;
-      -ms-user-select: text;
-      user-select: text;
-      cursor: text;
+      pointer-events: auto !important;
+      -webkit-user-select: text !important;
+      -moz-user-select: text !important;
+      -ms-user-select: text !important;
+      user-select: text !important;
+      cursor: text !important;
+      background-color: #111 !important;
+      border: 2px solid #e900ff !important;
+      color: #e900ff !important;
+      outline: none !important;
+      caret-color: auto !important;
+      position: static;
+      z-index: auto;
     }
     #keyboard-container {
       display: none;
@@ -395,7 +406,7 @@
     <div class="clue" id="clue"></div>
     <div id="attempts"></div>
     <div class="input-area">
-        <input type="text" id="guess" placeholder="Enter your guess" />
+        <input type="text" id="guess" placeholder="Enter your guess" readonly />
       <button id="submit">Submit</button>
     </div>
     <div id="keyboard-container"></div>
